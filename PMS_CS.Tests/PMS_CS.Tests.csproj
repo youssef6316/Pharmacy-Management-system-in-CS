@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
+        <PackageReference Include="xunit" Version="2.5.3"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <!-- Same ADO.NET driver the main project uses -->
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Reference to your main project — this is what was failing -->
+        <ProjectReference Include="..\PMS_CS\PMS_CS.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\" />
+      <Folder Include="Repository\" />
+      <Folder Include="Service\" />
+    </ItemGroup>
+
+</Project>
