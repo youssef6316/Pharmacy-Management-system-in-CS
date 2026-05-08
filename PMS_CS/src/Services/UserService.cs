@@ -29,6 +29,12 @@ public class UserService
         string username, string password, string email,
         string phone, float age, string address)
     {
+        username = username?.Trim() ?? string.Empty;
+        password = password?.Trim() ?? string.Empty;
+        email    = email?.Trim() ?? string.Empty;
+        phone    = phone?.Trim() ?? string.Empty;
+        address  = address?.Trim() ?? string.Empty;
+
         // ── Validation (business rules — not SQL) ─────────────────────────
         if (string.IsNullOrWhiteSpace(username))
             return (-1, "Username cannot be empty.");
@@ -69,6 +75,12 @@ public class UserService
         string phone, string jobType, double salary,
         Employee requestingEmployee)
     {
+        username = username?.Trim() ?? string.Empty;
+        password = password?.Trim() ?? string.Empty;
+        email    = email?.Trim() ?? string.Empty;
+        phone    = phone?.Trim() ?? string.Empty;
+        jobType  = jobType?.Trim() ?? string.Empty;
+
         // ── Authorization — business rule, enforced in service ────────────
         // This is the C# equivalent of Admin.setSalary() checking the role.
         if (!requestingEmployee.IsAdmin())
@@ -79,6 +91,15 @@ public class UserService
 
         if (string.IsNullOrWhiteSpace(username))
             return (-1, "Username cannot be empty.");
+
+        if (string.IsNullOrWhiteSpace(password) || password.Length < 6)
+            return (-1, "Password must be at least 6 characters.");
+
+        if (!email.Contains('@'))
+            return (-1, "Invalid email address.");
+
+        if (string.IsNullOrWhiteSpace(phone))
+            return (-1, "Phone cannot be empty.");
 
         if (_userRepo.GetUserByUsername(username) != null)
             return (-1, "Username is already taken.");
@@ -109,6 +130,9 @@ public class UserService
     /// </summary>
     public (User? User, string Error) Login(string username, string password)
     {
+        username = username?.Trim() ?? string.Empty;
+        password = password?.Trim() ?? string.Empty;
+
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             return (null, "Username and password are required.");
 
