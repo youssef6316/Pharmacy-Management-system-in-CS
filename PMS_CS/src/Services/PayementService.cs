@@ -28,8 +28,8 @@ public class PaymentService
         if (order == null)
             return (-1, "Order not found.");
 
-        if (!order.IsCompleted())
-            return (-1, "Payment can only be processed for completed orders.");
+        if (!order.IsPending())
+            return (-1, "Payment can only be processed for pending orders.");
 
         // Guard against double-payment.
         var existing = _paymentRepo.GetPaymentByOrder(orderId);
@@ -50,6 +50,7 @@ public class PaymentService
 
         // Mark it completed immediately on successful save.
         _paymentRepo.UpdateStatus(newId, "Completed");
+        _orderRepo.UpdateStatus(orderId, "Completed");
 
         return (newId, string.Empty);
     }
