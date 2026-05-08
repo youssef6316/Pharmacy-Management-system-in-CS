@@ -10,7 +10,7 @@ public static class DBConnection
     // ────────────────────────────────────────────────────────────────────
 
     private static string ConnectionString =
-        $"Server={Server};Database={Database};TrustServerCertificate=True;";
+        $"Server={Server};Database={Database};Integrated Security=True;TrustServerCertificate=True;";
 
     public static SqlConnection GetConnection()
     {
