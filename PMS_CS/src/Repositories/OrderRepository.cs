@@ -146,6 +146,27 @@ public class OrderRepository
         return orders;
     }
 
+    public List<Order> GetPendingOrders()
+    {
+        const string query = @"
+            SELECT OrderID, OrderDate, TotalPrice, Status, PatientID, CashierID
+            FROM [ORDER]
+            WHERE Status = 'Pending'
+            ORDER BY OrderDate DESC, OrderID DESC";
+
+        using var conn = DBConnection.GetConnection();
+        using var cmd  = new SqlCommand(query, conn);
+
+        conn.Open();
+        using var reader = cmd.ExecuteReader();
+
+        var orders = new List<Order>();
+        while (reader.Read())
+            orders.Add(MapOrder(reader));
+
+        return orders;
+    }
+
     // ── UPDATE STATUS ─────────────────────────────────────────────────────
 
     public bool UpdateStatus(int orderId, string status)

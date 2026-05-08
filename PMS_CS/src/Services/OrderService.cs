@@ -142,4 +142,16 @@ public class OrderService
     public Order?        GetOrderById(int orderId)         => _orderRepo.GetOrderById(orderId);
     public List<Order>   GetOrdersByPatient(int patientId) => _orderRepo.GetOrdersByPatient(patientId);
     public List<Order>   GetOrdersByCashier(int cashierId) => _orderRepo.GetOrdersByCashier(cashierId);
+    public List<Order>   GetPendingOrders()                => _orderRepo.GetPendingOrders();
+
+    public List<Order> GetReceivedOrdersForEmployee(Employee employee)
+    {
+        if (employee.IsCashier() || employee.IsAdmin())
+            return _orderRepo.GetPendingOrders();
+
+        if (employee.IsPharmacist())
+            return _orderRepo.GetOrdersByCashier(employee.UserId);
+
+        return new List<Order>();
+    }
 }
