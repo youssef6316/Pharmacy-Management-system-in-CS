@@ -37,12 +37,20 @@ public class UserRepository
         cmd.Parameters.AddWithValue("@Phone",    user.Phone);
         cmd.Parameters.AddWithValue("@IsActive", user.IsActive);
 
-        conn.Open();
+        try
+        {
+            conn.Open();
 
-        // ExecuteScalar() returns the single value produced by OUTPUT INSERTED.
-        // It returns object? so we cast it to int.
-        var result = cmd.ExecuteScalar();
-        return result != null ? (int)result : -1;
+            // ExecuteScalar() returns the single value produced by OUTPUT INSERTED.
+            // It returns object? so we cast it to int.
+            var result = cmd.ExecuteScalar();
+            return result != null ? (int)result : -1;
+        }
+        catch (SqlException ex) when (ex.Number is 2601 or 2627)
+        {
+            // Duplicate key / unique constraint violations should not crash the UI.
+            return -1;
+        }
     }
 
     // ── READ (single) ─────────────────────────────────────────────────────
